@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="main"></div>
+    <canvas id="webgl-container" width="1000" height="600"></canvas>
+
+    <script src="src/vendor/jquery-1.10.2.min.js"></script>
+    <script src="src/vendor/MIDI.js"></script>
+    <script src="src/vendor/gl-matrix-min.js"></script>
+
+    <script src="src/math/MathHelper.js"></script>
+
+    <script src="src/physics/BoundingBox.js"></script>
+
+    <script src="src/renderer/GeometryPassProgram.js"></script>
+    <script src="src/renderer/GBuffer.js"></script>
+    <script src="src/renderer/ScreenDeviceQuad.js"></script>
+    <script src="src/renderer/DirectionalLight.js"></script>
+    <script src="src/renderer/ShaderProgram.js"></script>
+    <script src="src/renderer/WorldContainer.js"></script>
+    <script src="src/renderer/PerspectiveCamera.js"></script>
+    <script src="src/renderer/Renderer.js"></script>
+    <script src="src/renderer/Object3D.js"></script>
+    <script src="src/renderer/Texture.js"></script>
+    <script src="src/renderer/VertexBuffer.js"></script>
+    <script src="src/renderer/IndexBuffer.js"></script>
+    <script src="src/renderer/Material.js"></script>
+    <script src="src/renderer/Mesh.js"></script>
+    <script src="src/renderer/MeshPart.js"></script>
+
+    <script src="src/util/MatrixStack.js"></script>
+    <script src="src/util/StringExtension.js"></script>
+    <script src="src/util/Map.js"></script>
+
+    <script src="src/resource/ShaderProgramLoader.js"></script>
+    <script src="src/resource/MapLoader.js"></script>
+    <script src="src/resource/G3DJObjectLoader.js"></script>
+    <script src="src/resource/ResourceManager.js"></script>
+
+    <script src="src/core/Looper.js"></script>
+    <script src="src/core/Scene.js"></script>
+    <script src="src/core/Initiate.js"></script>
+
+    <script type="text/javascript">
+        var aurora = new AURORA.Initiate("webgl-container");
+        aurora.loadG3DJObject("cocacola.g3dj");
+        aurora.loadG3DJObjects("floor.g3dj");
+        aurora.start();
+    </script>
+</body>
+</html>
