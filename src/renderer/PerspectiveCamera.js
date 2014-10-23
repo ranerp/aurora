@@ -1,25 +1,35 @@
 if (typeof(AURORA) === "undefined") var AURORA = {};
 
 AURORA.PerspectiveCamera = function(fieldOfView, near, far) {
-    this.cameraAt = [50.0, 10.0, -10.0];
-    this.direction = [-200.0, 0.0, 30.0];
-    this.right = [1.0, 0.0, 0.0];
-    this.up = [0.0, 1.0, 0.0];
+    this.cameraAt = [0.0, 150.0, 100.0];
+    this.horizontalAngle = AURORA.Math.degToRad(180);
+    this.verticalAngle = AURORA.Math.degToRad(-45);
+
+    this.direction = vec3.create();
+    this.up = vec3.create();
+    this.right = vec3.create();
 
     this.fov = fieldOfView;
     this.near = near;
     this.far = far;
 
+    this.calculateCoordinateAxis(this.horizontalAngle, this.verticalAngle);
 };
 
 AURORA.PerspectiveCamera.prototype = {
 
     constructor: AURORA.PerspectiveCamera,
 
+    addAngles: function(hAngle, vAngle) {
+        this.horizontalAngle += hAngle;
+        this.verticalAngle += vAngle;
+
+        this.calculateCoordinateAxis(this.horizontalAngle, this.verticalAngle);
+    },
+
     getPerspectiveMatrix: function() {
         var pMatrix = mat4.create();
         mat4.perspective(pMatrix, this.fov, AURORA.GL.viewportWidth / AURORA.GL.viewportHeight, this.near, this.far);
-
         return pMatrix;
     },
 
@@ -41,7 +51,11 @@ AURORA.PerspectiveCamera.prototype = {
         return this.cameraAt;
     },
 
-    calculateCoordinateAxises: function(horizontalAngle, verticalAngle) {
+    getRight: function() {
+        return this.right;
+    },
+
+    calculateCoordinateAxis: function(horizontalAngle, verticalAngle) {
         this.direction = [
             Math.cos(verticalAngle) * Math.sin(horizontalAngle),
             Math.sin(verticalAngle),
@@ -55,5 +69,7 @@ AURORA.PerspectiveCamera.prototype = {
         ];
 
         vec3.cross(this.up, this.right, this.direction);
+
+        console.log("v: " + AURORA.Math.radToDeg(this.verticalAngle ) + " h: " + AURORA.Math.radToDeg(this.horizontalAngle));
     }
 };

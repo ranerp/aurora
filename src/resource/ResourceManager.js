@@ -16,6 +16,8 @@ AURORA.ResourceManager.prototype = {
         this.TEXTUREPATH = AURORA.COREPATH + "assets/textures/";
         this.SHADERPATH = AURORA.COREPATH + "assets/shaders/";
 
+        this.CONFIGPATH = AURORA.COREPATH + "assets/cfg/";
+
         this.textureContainer = new AURORA.Map(true);
         this.shaderProgramContainer = new AURORA.Map(true);
         this.worldContainer = worldContainer;
@@ -187,6 +189,19 @@ AURORA.ResourceManager.prototype = {
                 }
             });
         }
+    },
+
+    loadConfig: function(filename, callback) {
+        var self = this;
+
+        jQuery.ajax({
+            type: "GET",
+            url: self.CONFIGPATH + filename,
+            async: false,
+            success: function(data) {
+                callback(JSON.parse(data));
+            }
+        });
     },
 
     loadMessage: function(loadData) {

@@ -1,11 +1,22 @@
-AURORA.Initiate = function(container) {
+AURORA.Initiate = function(container, width, height) {
     AURORA.COREPATH = "./";
-    AURORA.objectsContainer = document.getElementById(container);
+    AURORA.DEBUG = true;
+    AURORA.BREAK_LOOP = false;
+    AURORA.canvas = document.getElementById(container);
+    AURORA.canvas.setAttribute("width", width);
+    AURORA.canvas.setAttribute("height", height);
 
-    AURORA.GL = AURORA.objectsContainer.getContext("webgl", {antialias: false, stencil: true});
-    AURORA.GL.viewportWidth = AURORA.objectsContainer.width;
-    AURORA.GL.viewportHeight = AURORA.objectsContainer.height;
+    AURORA.GL = AURORA.canvas.getContext("webgl", {antialias: false, stencil: true});
+    AURORA.GL.viewportWidth = AURORA.canvas.width;
+    AURORA.GL.viewportHeight = AURORA.canvas.height;
     AURORA.GL.viewport(0, 0, AURORA.GL.viewportWidth, AURORA.GL.viewportHeight);
+
+    AURORA.canvas.requestPointerLock = AURORA.canvas.requestPointerLock || AURORA.canvas.mozRequestPointerLock ||
+                                       AURORA.canvas.webkitRequestPointerLock;
+
+    document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
+
+    AURORA.DEFAULT_INPUT_CONFIG = "input.cfg";
 
     AURORA.Math = new AURORA.MathHelper();
 
@@ -17,15 +28,19 @@ AURORA.Initiate = function(container) {
         return;
 
 
-    this.worldContainer = new AURORA.WorldContainer();
+    AURORA.world = new AURORA.WorldContainer();
 
-    this.resourceManager = new AURORA.ResourceManager();
-    this.resourceManager.startUp(this.worldContainer);
+    AURORA.resources = new AURORA.ResourceManager();
+    AURORA.resources.startUp(AURORA.world);
 
-    this.renderer = new AURORA.Renderer(this.resourceManager);
-    this.camera =  new AURORA.PerspectiveCamera(45.0, 0.1, 1000.0);
-    this.scene = new AURORA.Scene(this.camera, this.worldContainer, this.renderer);
-    this.looper = new AURORA.Looper(this.scene, AURORA.objectsContainer);
+    AURORA.input = new AURORA.Input(new AURORA.CameraController());
+    this.loadInputConfig(AURORA.DEFAULT_INPUT_CONFIG);
+
+    AURORA.renderer = new AURORA.Renderer(AURORA.resources);
+    AURORA.scene = new AURORA.Scene(new AURORA.PerspectiveCamera(45.0, 0.1, 1000.0), AURORA.world, AURORA.renderer);
+    AURORA.looper = new AURORA.Looper(AURORA.scene, AURORA.canvas);
+
+    AURORA.input.startToListen();
 };
 
 AURORA.Initiate.prototype = {
@@ -33,19 +48,23 @@ AURORA.Initiate.prototype = {
     constructor: AURORA.Initiate,
 
     loadG3DJObject: function(name) {
-        this.resourceManager.loadG3DJObject(name);
+        AURORA.resources.loadG3DJObject(name);
     },
 
     loadG3DJObjects: function(name) {
-        this.resourceManager.loadG3DJObjects(name);
+        AURORA.resources.loadG3DJObjects(name);
     },
 
     loadMap: function(name) {
-        this.resourceManager.loadMap(name);
+        AURORA.resources.loadMap(name);
+    },
+
+    loadInputConfig: function(filename) {
+        AURORA.resources.loadConfig(filename, AURORA.input.setConfig);
     },
 
     start: function() {
-        this.looper.loop();
+        AURORA.looper.loop();
     },
 
     getDepthExtension: function(GL) {

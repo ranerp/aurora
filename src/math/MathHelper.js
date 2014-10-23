@@ -8,13 +8,26 @@ AURORA.MathHelper.prototype = {
 
     constructor: AURORA.MathHelper,
 
-    getMVInvTransp: function(viewMatrix, modelMatrix) {
-        var invTransp = mat4.create();
-        mat4.multiply(invTransp, invTransp, modelMatrix);
-        mat4.multiply(invTransp, invTransp, viewMatrix);
-        mat4.invert(invTransp, invTransp);
-        mat4.transpose(invTransp, invTransp);
+    getITNormal: function(viewMatrix, modelMatrix) {
+        var mvMatrix = mat4.create();
+        mat4.multiply(mvMatrix, mvMatrix, modelMatrix);
+        mat4.multiply(mvMatrix, viewMatrix, mvMatrix);
 
-        return invTransp;
+        var ITNormal = mat3.create();
+        mat3.normalFromMat4(ITNormal, mvMatrix);
+
+        return ITNormal;
+    },
+
+    radToDeg: function(rad) {
+        return rad * 180 / Math.PI;
+    },
+
+    degToRad: function(deg) {
+        return deg * Math.PI / 180;
+    },
+
+    dotToRad: function(dot) {
+        return Math.acos(dot);
     }
 };

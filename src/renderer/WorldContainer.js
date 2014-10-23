@@ -1,11 +1,12 @@
 if (typeof(AURORA) === "undefined") var AURORA = {};
 
 AURORA.WorldContainer = function() {
-    this.objectsContainer = [];
-    this.lightsContainer = [];
+    this.objects = [];
+    this.directionalLights = [];
+    this.pointLights = [];
 
-    var light = new AURORA.DirectionalLight([150.0, 50.0, 50.0], [-150, -50.0, -50.0], [1.0, 1.0, 1.0], 25);
-    this.lightsContainer.push(light);
+    var light = new AURORA.DirectionalLight(AURORA.BaseLightDefault(), 0.0, -0.5, -0.5);
+    this.directionalLights.push(light);
 };
 
 AURORA.WorldContainer.prototype = {
@@ -13,19 +14,23 @@ AURORA.WorldContainer.prototype = {
     constructor: AURORA.WorldContainer,
 
     getRenderableObjects: function() {
-        return this.objectsContainer;
+        return this.objects;
     },
 
-    getRenderableLights: function() {
-        return this.lightsContainer;
+    getRenderableDirectionalLights: function() {
+        return this.directionalLights;
+    },
+
+    getRenderablePointLights: function() {
+        return this.pointLights;
     },
 
     addObject: function(object) {
-        this.objectsContainer.push(object);
+        this.objects.push(object);
     },
 
     addObjects: function(objects) {
         for(var i = 0; i < objects.length; i++)
-            this.objectsContainer.push(objects[i]);
+            this.objects.push(objects[i]);
     }
 };

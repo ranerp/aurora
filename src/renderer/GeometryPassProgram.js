@@ -23,7 +23,7 @@ AURORA.GeometryPassProgram.prototype = {
         this.u_Model = AURORA.GL.getUniformLocation(this.program, "u_Model");
         this.u_View = AURORA.GL.getUniformLocation(this.program, "u_View");
         this.u_Perspective = AURORA.GL.getUniformLocation(this.program, "u_Perspective");
-        this.u_InvTranspose = AURORA.GL.getUniformLocation(this.program, "u_InvTranspose");
+        this.u_ITNormal = AURORA.GL.getUniformLocation(this.program, "u_ITNormal");
 
         this.u_Texture = AURORA.GL.getUniformLocation(this.program, "u_Texture");
     },
@@ -32,11 +32,11 @@ AURORA.GeometryPassProgram.prototype = {
         AURORA.GL.useProgram(this.program);
     },
 
-    setUniforms: function(u_Model, u_View, u_Perspective, u_InvTranspose) {
+    setUniforms: function(u_Model, u_View, u_Perspective, u_ITNormal) {
         AURORA.GL.uniformMatrix4fv(this.u_Model, false, u_Model);
         AURORA.GL.uniformMatrix4fv(this.u_View, false, u_View);
         AURORA.GL.uniformMatrix4fv(this.u_Perspective, false, u_Perspective);
-        AURORA.GL.uniformMatrix4fv(this.u_InvTranspose, false, u_InvTranspose);
+        AURORA.GL.uniformMatrix3fv(this.u_ITNormal, false, u_ITNormal);
     },
 
     drawElements: function(vertexBuffer, indexBuffer, texture) {
@@ -75,5 +75,5 @@ AURORA.GeometryPassProgram.prototype = {
         AURORA.GL.disableVertexAttribArray(this.a_Position);
         AURORA.GL.disableVertexAttribArray(this.a_Normal);
         AURORA.GL.disableVertexAttribArray(this.a_TexCoord);
-    },
+    }
 };

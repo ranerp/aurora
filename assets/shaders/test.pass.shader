@@ -1,5 +1,5 @@
 {
-    "type": "geometry.pass",
+    "type": "test.pass",
     "vertexShader": [
         "precision highp float;",
 
@@ -8,8 +8,13 @@
 
         "varying vec2 v_TexCoord;",
 
+        "vec2 calcTexCoord(vec2 texCoord)",
+        "{",
+            "return texCoord * 0.5 + vec2(0.5);",
+        "}",
+
         "void main() {",
-            "v_TexCoord = a_TexCoord * 0.5 + vec2(0.5);",
+            "v_TexCoord = calcTexCoord(a_TexCoord);",
             "gl_Position = vec4(a_Position, 1.0);",
         "}"
     ],

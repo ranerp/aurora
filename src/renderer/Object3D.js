@@ -21,6 +21,13 @@ AURORA.Object3D.prototype = {
         this.mesh = mesh;
     },
 
+    setPosition: function(vec3) {
+        this.translation = vec3;
+
+        this.DIRTY_FLAG = true;
+        this.mesh.setDirtyFlag(true);
+    },
+
     render: function(program, modelMatrixStack, viewMatrix, perspectiveMatrix) {
         modelMatrixStack.push();
 

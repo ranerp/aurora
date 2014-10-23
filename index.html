@@ -15,10 +15,14 @@
 
     <script src="src/physics/BoundingBox.js"></script>
 
+    <script src="src/input/Input.js"></script>
+    <script src="src/input/CameraController.js"></script>
+
+    <script src="src/renderer/DirectionalPassProgram.js"></script>
     <script src="src/renderer/GeometryPassProgram.js"></script>
     <script src="src/renderer/GBuffer.js"></script>
     <script src="src/renderer/ScreenDeviceQuad.js"></script>
-    <script src="src/renderer/DirectionalLight.js"></script>
+    <script src="src/renderer/Lights.js"></script>
     <script src="src/renderer/ShaderProgram.js"></script>
     <script src="src/renderer/WorldContainer.js"></script>
     <script src="src/renderer/PerspectiveCamera.js"></script>
@@ -45,9 +49,9 @@
     <script src="src/core/Initiate.js"></script>
 
     <script type="text/javascript">
-        var aurora = new AURORA.Initiate("webgl-container");
+        var aurora = new AURORA.Initiate("webgl-container", 1024, 768);
         aurora.loadG3DJObject("cocacola.g3dj");
-        aurora.loadG3DJObjects("floor.g3dj");
+        aurora.loadG3DJObjects("floor_new.g3dj");
         aurora.start();
     </script>
 </body>

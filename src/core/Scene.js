@@ -1,9 +1,11 @@
 if (typeof(AURORA) === "undefined") var AURORA = {};
 
-AURORA.Scene = function(camera, worldContainer, renderer) {
+AURORA.Scene = function(camera, cameraController, worldContainer, renderer) {
 
     this.cameras = [];
     this.cameras.push(camera);
+
+    this.cameraController = cameraController;
 
     this.worldContainer = worldContainer;
     this.renderer = renderer;
@@ -19,12 +21,19 @@ AURORA.Scene.prototype = {
         this.lights.push(light);
     },
 
+    getActiveCamera: function() {
+        return this.activeCamera;
+    },
+
     update: function(deltaTime) {
-        this.renderer.setObjectsToRender(this.worldContainer.getRenderableObjects());
-        this.renderer.setLightsToRender(this.worldContainer.getRenderableLights());
+        AURORA.input.getCameraController().moveCameraPosition(deltaTime);
+
+        AURORA.renderer.setObjectsToRender(AURORA.world.getRenderableObjects());
+        AURORA.renderer.setDirLightsToRender(AURORA.world.getRenderableDirectionalLights());
+        AURORA.renderer.setPointLightsToRender(AURORA.world.getRenderablePointLights());
     },
 
     render: function() {
-        this.renderer.render(this.activeCamera);
+        AURORA.renderer.render(this.activeCamera);
     }
 };

@@ -10,7 +10,7 @@
         "uniform mat4 u_Model;",
         "uniform mat4 u_View;",
         "uniform mat4 u_Perspective;",
-        "uniform mat4 u_InvTranspose;",
+        "uniform mat3 u_ITNormal;",
 
         "varying vec4 v_Position;",
         "varying vec3 v_Normal;",
@@ -23,9 +23,9 @@
 
             "gl_Position = homogeneousSpace;",
             "v_Position = cameraSpace;",
-            "v_Normal = (u_InvTranspose * vec4(a_Normal, 0.0)).xyz;",
+            "v_Normal = u_ITNormal * a_Normal;",
             "v_TexCoord = a_TexCoord;",
-            "v_Depth = gl_Position.z / gl_Position.w;",
+            "v_Depth = homogeneousSpace.z;",
         "}"
     ],
     "fragmentShader": [
@@ -41,7 +41,7 @@
 
         "void main(void){",
             "gl_FragData[0] = vec4(vec3(v_Depth), 1.0);",
-            "gl_FragData[1] = vec4(normalize(v_Normal.xyz), 1.0);",
+            "gl_FragData[1] = vec4(normalize(v_Normal), 1.0);",
             "gl_FragData[2] = v_Position;",
             "gl_FragData[3] = vec4(texture2D(u_Texture, v_TexCoord).xyz, 1.0);",
         "}"

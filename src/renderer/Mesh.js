@@ -44,6 +44,13 @@ AURORA.Mesh.prototype = {
         this.vertexBuffer = vertexBuffer;
     },
 
+    setDirtyFlag: function(bool) {
+        this.DIRTY_FLAG = bool;
+
+        for(var i = 0; i < this.children.length; i++)
+            this.children[i].setDirtyFlag(bool);
+    },
+
     render: function(program, modelMatrixStack, viewMatrix, perspectiveMatrix) {
         modelMatrixStack.push();
 
@@ -64,7 +71,7 @@ AURORA.Mesh.prototype = {
     renderParts: function(program, modelMatrix, viewMatrix, perspectiveMatrix) {
         for(var i = 0; i < this.parts.length; i++) {
             program.activateProgram();
-            program.setUniforms(modelMatrix, viewMatrix, perspectiveMatrix, AURORA.Math.getMVInvTransp(viewMatrix, modelMatrix));
+            program.setUniforms(modelMatrix, viewMatrix, perspectiveMatrix, AURORA.Math.getITNormal(viewMatrix, modelMatrix));
             program.drawElements(this.vertexBuffer, this.parts[i].indexBuffer, this.parts[i].material.texture);
         }
     },

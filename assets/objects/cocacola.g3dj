@@ -5196,23 +5196,23 @@
 					"id": "polySurface1",
 					"parts": [
 						{
-							"meshpartid": "shape3_part1", 
-							"materialid": "phong4", 
+							"meshpartid": "shape3_part1",
+							"materialid": "phong4",
 							"uvMapping": [[]]
-						}, 
+						},
 						{
-							"meshpartid": "shape3_part2", 
-							"materialid": "phong2", 
+							"meshpartid": "shape3_part2",
+							"materialid": "phong2",
 							"uvMapping": [[  0]]
-						}, 
+						},
 						{
-							"meshpartid": "shape3_part3", 
-							"materialid": "phong3", 
+							"meshpartid": "shape3_part3",
+							"materialid": "phong3",
 							"uvMapping": [[]]
-						}, 
+						},
 						{
-							"meshpartid": "shape3_part4", 
-							"materialid": "mia_material_x1", 
+							"meshpartid": "shape3_part4",
+							"materialid": "mia_material_x1",
 							"uvMapping": [[]]
 						}
 					]

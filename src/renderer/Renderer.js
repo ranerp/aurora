@@ -14,7 +14,7 @@ AURORA.Renderer = function(resourceManager) {
     this.gBuffer = new AURORA.GBuffer();
 
     this.geometryPassProgram = new AURORA.GeometryPassProgram(this.resourceManager.loadShaderProgram(AURORA.SHADER_PROGRAM_TYPE.GEOMETRY_PASS));
-    this.testPassProgram = this.resourceManager.loadShaderProgram(AURORA.SHADER_PROGRAM_TYPE.TEST_PASS);
+    this.directionalPassProgram = new AURORA.DirectionalPassProgram(this.resourceManager.loadShaderProgram(AURORA.SHADER_PROGRAM_TYPE.DIRECTIONAL_PASS));
 };
 
 AURORA.Renderer.prototype = {
@@ -35,9 +35,9 @@ AURORA.Renderer.prototype = {
         AURORA.GL.enable(AURORA.GL.BLEND);
         AURORA.GL.disable(AURORA.GL.DEPTH_TEST);
         AURORA.GL.blendFunc(AURORA.GL.ONE, AURORA.GL.ONE);
-        AURORA.GL.clear(AURORA.GL.COLOR_BUFFER_BIT);
 
-        this.testPass();
+        for(var i = 0; i < this.dirLights.length; i++)
+            this.dirPass(this.viewMatrix, this.dirLights[i]);
 
         AURORA.GL.disable(AURORA.GL.BLEND);
         AURORA.GL.bindFramebuffer(AURORA.GL.FRAMEBUFFER, null);
@@ -49,15 +49,19 @@ AURORA.Renderer.prototype = {
             objects[i].render(this.geometryPassProgram, this.modelMatrixStack, this.viewMatrix, this.perspectiveMatrix);
     },
 
-    testPass: function() {
-        this.testPassProgram.setUpTestPass(
+    dirPass: function(viewMatrix, directionalLight) {
+        this.directionalPassProgram.activateProgram();
+
+        this.directionalPassProgram.setUniforms(viewMatrix, directionalLight);
+
+        this.directionalPassProgram.setUpTextures(
             this.gBuffer.textures[AURORA.GBUFFER_TEXTURE_TYPE.GBUFFER_TEXTURE_TYPE_DEPTH],
             this.gBuffer.textures[AURORA.GBUFFER_TEXTURE_TYPE.GBUFFER_TEXTURE_TYPE_NORMAL],
             this.gBuffer.textures[AURORA.GBUFFER_TEXTURE_TYPE.GBUFFER_TEXTURE_TYPE_POSITION],
             this.gBuffer.textures[AURORA.GBUFFER_TEXTURE_TYPE.GBUFFER_TEXTURE_TYPE_TEXCOORD]
         );
 
-        this.testPassProgram.drawTestPass(
+        this.directionalPassProgram.draw(
             this.screenDeviceQuad.vboVertices,
             this.screenDeviceQuad.vboTextures,
             this.screenDeviceQuad.vboIndices,
@@ -69,7 +73,11 @@ AURORA.Renderer.prototype = {
         this.objects = objects;
     },
 
-    setLightsToRender: function(lights) {
-        this.lights = lights;
+    setDirLightsToRender: function(lights) {
+        this.dirLights = lights;
+    },
+
+    setPointLightsToRender: function(lights) {
+        this.pointLights = lights;
     }
 };

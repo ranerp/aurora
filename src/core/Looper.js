@@ -7,7 +7,7 @@ AURORA.Looper = function(scene, domElement) {
     this.lastTime = 0;
     this.deltaTime = 0;
 
-    this.terminationTime = 3;
+    this.terminationTime = 30;
     this.timer = 0;
 
     this.requestId;
@@ -38,11 +38,12 @@ AURORA.Looper.prototype = {
 
         this.calculateDeltaTime();
 
-        if(this.timer > this.terminationTime)
+        if(AURORA.BREAK_LOOP && this.timer > this.terminationTime)
             this.terminate();
         else {
-            this.scene.update(this.deltaTime);
-            this.scene.render();
+            AURORA.input.getCameraController().moveCameraPosition(this.deltaTime);
+            AURORA.scene.update(this.deltaTime);
+            AURORA.scene.render();
         }
     },
 
